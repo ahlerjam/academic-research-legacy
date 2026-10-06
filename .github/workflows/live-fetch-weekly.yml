@@ -43,7 +43,7 @@ concurrency:
 jobs:
   live-fetch:
     name: Live-Fetch-Suiten real ausfuehren
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     # Harter Budget-Deckel (analog eval-behavior.yml): beide Suiten zusammen
     # brauchen in der Praxis wenige Minuten; 30 Minuten sind ein
     # grosszuegiger, aber endlicher Deckel gegen einen haengenden Lauf.

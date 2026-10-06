@@ -17,7 +17,7 @@ jobs:
   # 1. JSON-Manifeste muessen valide sein
   manifest-validation:
     name: Manifest-Validierung (JSON)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: jq empty auf allen Manifesten
@@ -32,7 +32,7 @@ jobs:
   # 2. Hook-Quelldateien muessen syntaktisch valide sein
   hook-syntax:
     name: Hook-Syntax (node --check)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       # Node 22 statt 20 (#600): node:sqlite ist ab 22.13.0 ohne
@@ -50,7 +50,7 @@ jobs:
   # 3. Jede Command/Agent-Datei braucht Frontmatter mit nicht-leerer description
   frontmatter-coverage:
     name: Frontmatter-Coverage (commands + agents)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-python@v7
@@ -93,7 +93,7 @@ jobs:
   # 4. Schnelle Skill-Manifest- und Naming-Checks
   skill-tests:
     name: Skill-Manifest- & Naming-Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: ./.github/actions/setup-python-uv
@@ -105,7 +105,7 @@ jobs:
   # 4b. Lint + Typpruefung (ruff + mypy) — Konfig in pyproject.toml (#202, vgl. #184)
   lint-types:
     name: Lint + Typen (ruff + mypy)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       # Versionen gepinnt (flowkit Stufe 0): ruff format --check ist blockierend —
@@ -128,7 +128,7 @@ jobs:
   # 4c. flowkit-Hook-Harness: testet die DEPLOYTE Blocker-Datei, nicht das Template (#343)
   flowkit-hook-harness:
     name: flowkit-Hook-Harness (bash)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: PreToolUse-Blocker Regression-Harness
@@ -144,7 +144,7 @@ jobs:
   # 4d. Shell-Syntax-Gate: bash -n ueber alle *.sh-Skripte im Repo (#469 AC3)
   shell-syntax:
     name: Shell-Syntax (bash -n)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Regression-Harness (beweist Fehlererkennung an kaputter Fixture)
@@ -166,7 +166,7 @@ jobs:
   #    dort ohnehin uebersprungen statt sie zu fangen. Operator-Entscheidung.
   python-tests:
     name: pytest (${{ matrix.os }}, py${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     strategy:
       fail-fast: false
       matrix:
@@ -237,7 +237,7 @@ jobs:
   #    Repo, ein HuggingFace-Zugriff waere hier ein Fehler und kein Fallback.
   retrieval-goldset:
     name: Retrieval-Goldset (Recall/nDCG/MRR @10)
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     env:
       HF_HUB_OFFLINE: "1"
       TRANSFORMERS_OFFLINE: "1"
