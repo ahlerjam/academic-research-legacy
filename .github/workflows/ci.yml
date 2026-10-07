@@ -166,7 +166,7 @@ jobs:
   #    dort ohnehin uebersprungen statt sie zu fangen. Operator-Entscheidung.
   python-tests:
     name: pytest (${{ matrix.os }}, py${{ matrix.python-version }})
-    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
+    runs-on: ${{ fromJSON(vars.RUNNER_LARGE || '"ubuntu-latest"') }}
     strategy:
       fail-fast: false
       matrix:
