@@ -80,7 +80,7 @@ concurrency:
 
 jobs:
   autoupdate:
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 20
     steps:
       - id: guard
