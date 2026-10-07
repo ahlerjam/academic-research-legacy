@@ -167,6 +167,8 @@ jobs:
   python-tests:
     name: pytest (${{ matrix.os }}, py${{ matrix.python-version }})
     runs-on: ${{ fromJSON(vars.RUNNER_LARGE || '"ubuntu-latest"') }}
+    env:
+      PERF_TIME_FACTOR: ${{ vars.RUNNER_LARGE && '2.5' || '1' }}
     strategy:
       fail-fast: false
       matrix:
