@@ -384,8 +384,9 @@ def academic_tree_fingerprint(root: Path | None = None) -> dict[str, tuple[int, 
       * ``<root>/projects`` rekursiv       -- hier liegen die vault.db-Dateien.
         Ein Ueberschreiben an Ort und Stelle aendert den Ordner-mtime NICHT, es
         braucht also die Dateiebene (genau der Vorfall vom 11.08.2026).
-      * ``<root>/snapshots`` eine Ebene    -- ein neuer Tarball in einem
-        Slug-Ordner hebt dessen mtime, die Dateiebene ist hier unnoetig.
+      * ``<root>/snapshots`` zwei Ebenen   -- Slug-Ordner und Tarballs darin.
+        Der Ordner-mtime reicht nicht: seine Aufloesung folgt dem Kernel-Takt
+        (ms), mkdir und Datei-Anlage im selben Takt ergeben dieselbe Signatur.
 
     Nicht abgedeckt sind die Caches ``models/`` und ``venv/`` unterhalb der
     ersten Ebene: dort liegen keine Forschungsdaten.
@@ -420,7 +421,7 @@ def academic_tree_fingerprint(root: Path | None = None) -> dict[str, tuple[int, 
 
     scannen(basis, 1)
     scannen(basis / "projects", 4)
-    scannen(basis / "snapshots", 1)
+    scannen(basis / "snapshots", 2)
     return signatur
 
 
