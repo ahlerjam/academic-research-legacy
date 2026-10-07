@@ -83,7 +83,7 @@ concurrency:
 jobs:
   eval-behavior:
     name: Verhaltens-Evals real ausfuehren
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     # Harter Budget-Deckel (Issue #470 AC2): der CLI-Pfad (Issue #631, seit
     # #716 einziger Aufrufweg) ist pro Aufruf teuer -- der reale Probelauf im
     # PR #631 maß ~6s/Aufruf inkl. Agenten-Scaffold-Cache-Erstellung, macht
