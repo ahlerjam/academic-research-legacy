@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   prep:
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 3
     # Skip label events that do not touch the override label — size/priority
     # labels must not trigger review runs. (Skipped jobs satisfy a required
@@ -178,7 +178,7 @@ jobs:
   code-review:
     needs: prep
     if: needs.prep.outputs.cache_hit != 'true'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -299,7 +299,7 @@ jobs:
     # findings, no ci-failure placeholder). Extension point for other stacks:
     # swap this job's analyzer steps and set `deadCode: "on"`.
     if: needs.prep.outputs.cache_hit != 'true' && needs.prep.outputs.run_dead_code == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -452,7 +452,7 @@ jobs:
   doc-sync:
     needs: prep
     if: needs.prep.outputs.has_api_changes == 'true' && needs.prep.outputs.cache_hit != 'true'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -532,7 +532,7 @@ jobs:
   iac-safety:
     needs: prep
     if: needs.prep.outputs.has_iac_changes == 'true' && needs.prep.outputs.cache_hit != 'true'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -614,7 +614,7 @@ jobs:
     # produces no verdicts the coordinator filters nothing (zero blast radius).
     needs: [prep, code-review, dead-code, doc-sync, iac-safety]
     if: always() && needs.prep.result == 'success' && needs.prep.outputs.cache_hit != 'true'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -704,7 +704,7 @@ jobs:
   coordinator:
     needs: [prep, code-review, dead-code, doc-sync, iac-safety, verifier]
     if: always() && needs.prep.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER || '"ubuntu-latest"') }}
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
